@@ -215,7 +215,7 @@ namespace fcf {
         return _sdata;
       }
 
-      size_t capacity(){
+      size_t capacity() const{
         return _cdata;
       }
 
@@ -223,8 +223,12 @@ namespace fcf {
         return !_sdata;
       }
 
-      void clear(){
-        _realloc(0);
+      void clear(bool a_notReduce = false){
+        if (a_notReduce) {
+          _destroyMem(_pdata, _sdata, _sdata);
+        } else {
+          _realloc(0, 0);
+        }
       }
 
       void push_back(const Ty& a_value){
