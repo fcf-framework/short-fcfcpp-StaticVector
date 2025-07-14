@@ -1,6 +1,12 @@
 # short-fcfcpp-StaticVector
 A CPP class that stores data in internal data fields and, if necessary, allocates memory from the heap when there is insufficient memory
 
+---
+*Available links for this library:*
+* Article on dev.to: https://dev.to/vladimirm/c-vector-with-the-possibility-of-storage-in-data-in-the-memory-of-the-object-41k4
+---
+
+
 If the memory is released in a heap, then the size of the buffer is always distinguished by fixed blocks. The size of the block is determined by the following formula
 
 <img src="https://github.com/fcf-framework/short-fcfcpp-StaticVector/blob/main/README-sources/heap-func.png?raw=true"/>
