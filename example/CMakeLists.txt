@@ -19,5 +19,6 @@ add_executable("static-vector-tests"
                                      static-vector-tests/StaticVectorException.cpp
                                      static-vector-tests/StaticVectorIterator.cpp
                                      static-vector-tests/StaticVectorPush.cpp
+                                     static-vector-tests/StaticVectorNotReduce.cpp
                                      )
 

@@ -132,6 +132,8 @@ namespace fcf {
     friend void ::staticVectorPushTest();
 
     public:
+      typedef Ty value_type;
+      typedef size_t size_type;
       typedef IndexIterator<StaticVector&, Ty&>             iterator;
       typedef IndexIterator<const StaticVector&, const Ty&> const_iterator;
 
@@ -239,11 +241,16 @@ namespace fcf {
         ++_sdata;
       }
 
-      void pop_back(){
+      void pop_back(bool a_notReduce = false){
         if (_sdata) {
-          size_t prev = _getPreviousSize(capacity());
-          if (prev >= _sdata - 1){
-            _realloc(prev, _sdata-1);
+          if (!a_notReduce) {
+            size_t prev = _getPreviousSize(capacity());
+            if (prev >= _sdata - 1){
+              _realloc(prev, _sdata-1);
+            } else {
+              --_sdata;
+              _pdata[_sdata-1].~Ty();
+            }
           } else {
             --_sdata;
             _pdata[_sdata-1].~Ty();
@@ -251,8 +258,12 @@ namespace fcf {
         }
       }
 
-      void resize(size_t a_size) {
-        _realloc(_getBufferSize(a_size), a_size);
+      void resize(size_t a_size, bool a_notReduce = false) {
+        size_t newBufferSize = _getBufferSize(a_size);
+        if (a_notReduce && newBufferSize < _cdata) {
+          newBufferSize = _cdata;
+        }
+        _realloc(newBufferSize, a_size);
       }
 
     protected:
