@@ -249,11 +249,11 @@ namespace fcf {
               _realloc(prev, _sdata-1);
             } else {
               --_sdata;
-              _pdata[_sdata-1].~Ty();
+              _pdata[_sdata].~Ty();
             }
           } else {
             --_sdata;
-            _pdata[_sdata-1].~Ty();
+            _pdata[_sdata].~Ty();
           }
         }
       }
