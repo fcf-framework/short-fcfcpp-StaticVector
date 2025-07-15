@@ -7,7 +7,7 @@ A CPP class that stores data in internal data fields and, if necessary, allocate
 ---
 
 
-If the memory is released in a heap, then the size of the buffer is always distinguished by fixed blocks. The size of the block is determined by the following formula
+If the memory is allocated in a heap, then the size of the buffer is always distinguished by fixed blocks. The size of the block is determined by the following formula
 
 <img src="https://github.com/fcf-framework/short-fcfcpp-StaticVector/blob/main/README-sources/heap-func.png?raw=true"/>
 
