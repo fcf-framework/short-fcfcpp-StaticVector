@@ -1,29 +1,45 @@
 #include <iostream>
+#include <exception>
+#include <set>
 #include <fcfTest/test.hpp>
 #include "../../StaticVector.hpp"
 
 
 int g_staticVectorCopyTestItem_destructCounter = 0;
 int g_staticVectorCopyTestItem_constructCounter = 0;
+std::set<void*> g_staticVectorCopyTestItem_set;
 
 struct StaticVectorCopyTestItem {
   StaticVectorCopyTestItem()
     : value(9999){
     ++g_staticVectorCopyTestItem_constructCounter;
+    if (g_staticVectorCopyTestItem_set.find(this) != g_staticVectorCopyTestItem_set.end()){
+      throw std::runtime_error("Invalid test");
+    }
+    g_staticVectorCopyTestItem_set.insert(this);
   }
 
   StaticVectorCopyTestItem(int a_value)
     : value(a_value) {
     ++g_staticVectorCopyTestItem_constructCounter;
+    if (g_staticVectorCopyTestItem_set.find(this) != g_staticVectorCopyTestItem_set.end()){
+      throw std::runtime_error("Invalid test");
+    }
+    g_staticVectorCopyTestItem_set.insert(this);
   }
 
   StaticVectorCopyTestItem(const StaticVectorCopyTestItem& a_source)
     : value(a_source.value){
     ++g_staticVectorCopyTestItem_constructCounter;
+    if (g_staticVectorCopyTestItem_set.find(this) != g_staticVectorCopyTestItem_set.end()){
+      throw std::runtime_error("Invalid test");
+    }
+    g_staticVectorCopyTestItem_set.insert(this);
   }
 
   ~StaticVectorCopyTestItem(){
     ++g_staticVectorCopyTestItem_destructCounter;
+    g_staticVectorCopyTestItem_set.erase(this);
   }
 
   int value;
@@ -418,4 +434,5 @@ void staticVectorCopyTest(){
     FCF_TEST(v1.size() == 1, v1.size());
   }
 
+  FCF_TEST(g_staticVectorCopyTestItem_set.size() == 0, g_staticVectorCopyTestItem_set.size());
 }

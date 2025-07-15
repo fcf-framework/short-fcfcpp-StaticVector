@@ -1,27 +1,39 @@
 #include <iostream>
+#include <exception>
+#include <set>
 #include <fcfTest/test.hpp>
 #include "../../StaticVector.hpp"
 
 
 int g_staticVectorTestInitCounter = 0;
+std::set<void*> g_staticVectorTestItem_set;
 
 struct StaticVectorTestItem {
   StaticVectorTestItem()
   : ptr(0)
   , state(9999){
     ++g_staticVectorTestInitCounter;
+    if (g_staticVectorTestItem_set.find(this) != g_staticVectorTestItem_set.end()){
+      throw std::runtime_error("Invalid test");
+    }
+    g_staticVectorTestItem_set.insert(this);
   }
 
   StaticVectorTestItem(const StaticVectorTestItem& a_source)
   : ptr(a_source.ptr)
   , state(a_source.state){
     ++g_staticVectorTestInitCounter;
+    if (g_staticVectorTestItem_set.find(this) != g_staticVectorTestItem_set.end()){
+      throw std::runtime_error("Invalid test");
+    }
+    g_staticVectorTestItem_set.insert(this);
   }
 
   ~StaticVectorTestItem(){
     if (ptr) {
       ++(*ptr);
     }
+    g_staticVectorTestItem_set.erase(this);
   }
   int* ptr;
   int  state;
@@ -636,4 +648,5 @@ void staticVectorTest(){
     FCF_TEST(g_staticVectorTestInitCounter == 12, g_staticVectorTestInitCounter);
 
   }
+  FCF_TEST(g_staticVectorTestItem_set.size() == 0, g_staticVectorTestItem_set.size());
 }

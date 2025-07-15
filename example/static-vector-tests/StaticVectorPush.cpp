@@ -1,28 +1,44 @@
 #include <iostream>
+#include <exception>
+#include <set>
 #include <fcfTest/test.hpp>
 #include "../../StaticVector.hpp"
 
 int g_staticVectorPushTestItem_destructCounter = 0;
 int g_staticVectorPushTestItem_constructCounter = 0;
+std::set<void*> g_staticVectorPushTestItem_set;
 
 struct StaticVectorPushTestItem {
   StaticVectorPushTestItem()
     : value(9999){
     ++g_staticVectorPushTestItem_constructCounter;
+    if (g_staticVectorPushTestItem_set.find(this) != g_staticVectorPushTestItem_set.end()){
+      throw std::runtime_error("Invalid test");
+    }
+    g_staticVectorPushTestItem_set.insert(this);
   }
 
   StaticVectorPushTestItem(int a_value)
     : value(a_value) {
     ++g_staticVectorPushTestItem_constructCounter;
+    if (g_staticVectorPushTestItem_set.find(this) != g_staticVectorPushTestItem_set.end()){
+      throw std::runtime_error("Invalid test");
+    }
+    g_staticVectorPushTestItem_set.insert(this);
   }
 
   StaticVectorPushTestItem(const StaticVectorPushTestItem& a_source)
     : value(a_source.value){
     ++g_staticVectorPushTestItem_constructCounter;
+    if (g_staticVectorPushTestItem_set.find(this) != g_staticVectorPushTestItem_set.end()){
+      throw std::runtime_error("Invalid test");
+    }
+    g_staticVectorPushTestItem_set.insert(this);
   }
 
   ~StaticVectorPushTestItem(){
     ++g_staticVectorPushTestItem_destructCounter;
+    g_staticVectorPushTestItem_set.erase(this);
   }
 
   int value;
@@ -30,6 +46,7 @@ struct StaticVectorPushTestItem {
 
 void staticVectorPushTest(){
   std::cout << "Start staticVectorPushTest()..." << std::endl;
+  g_staticVectorPushTestItem_set.clear();
 
   {
     typedef fcf::StaticVector<StaticVectorPushTestItem, 8, 0, 8, 2, 0, 55> static_vector_type;
@@ -246,4 +263,6 @@ void staticVectorPushTest(){
              g_staticVectorPushTestItem_destructCounter);
 
   }
+
+  FCF_TEST(g_staticVectorPushTestItem_set.size() == 0, g_staticVectorPushTestItem_set.size());
 }
