@@ -96,8 +96,14 @@ namespace fcf {
 #include <memory>
 #include <cmath>
 
-void staticVectorTest();
-void staticVectorPushTest();
+namespace FcfTest {
+  namespace BasisTest {
+
+    void staticVectorTest();
+    void staticVectorPushTest();
+
+  } // BasisTest namespace
+} // FcfTest namespace
 
 namespace fcf {
 
@@ -128,8 +134,8 @@ namespace fcf {
   ///
   template<typename Ty, unsigned int StaticSize=16, unsigned int OffsetSize=2, unsigned int StepSize=2, unsigned int StepModuleInt=2, unsigned int StepModuleFrac=0, unsigned int MaxPow=/*16*2*4096/sizeof(Ty)*/ 0 >
   class StaticVector {
-    friend void ::staticVectorTest();
-    friend void ::staticVectorPushTest();
+    friend void ::FcfTest::BasisTest::staticVectorTest();
+    friend void ::FcfTest::BasisTest::staticVectorPushTest();
 
     public:
       typedef Ty value_type;
